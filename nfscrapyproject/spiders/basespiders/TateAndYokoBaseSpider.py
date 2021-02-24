@@ -7,11 +7,13 @@ from nfscrapyproject.items import DenimItem
 
 class TateAndYokoBaseSpider(scrapy.Spider):
     allowed_domains = ['www.tateandyoko.com']
+    cut = "placeholder"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
             
-    def parse_denim(self, response):
+    def parse_denim(self, response, cut):
+        self.cut = cut
         urls = response.xpath('//h2[@class="product-item__title"]/a/@href').extract()
         for url in urls:
             yield SplashRequest(response.urljoin(url), callback=self.parse_jean_product_pages, args={'wait': 5})
@@ -22,7 +24,7 @@ class TateAndYokoBaseSpider(scrapy.Spider):
         item['brand'] = response.xpath('//h2[@class="product-meta__vendor"]/text()').extract()[0].replace('\xa0', ' ')
         title = response.xpath('//h1[@class="product-meta__title"]/text()').extract()[0]
         title = title.split('-',1)
-        item['cut'] = "Easy Guy" 
+        item['cut'] = self.cut 
         item['name'] = title[1].strip().replace('\xa0', ' ')
 
         sale_price = response.xpath('//span[@class="product-meta__price product-meta__price--new"]').extract()

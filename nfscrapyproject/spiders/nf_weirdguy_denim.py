@@ -4,6 +4,7 @@ from .basespiders.TateAndYokoBaseSpider import TateAndYokoBaseSpider
 
 class NfWeirdguyDenimSpider(TateAndYokoBaseSpider):
     name = 'weirdguy_denim'
+    cut = "Weird Guy"
     start_urls = [
             'http://www.tateandyoko.com/collections/naked-and-famous-weird-guy?page=1',
             'http://www.tateandyoko.com/collections/naked-and-famous-weird-guy?page=2',
@@ -22,5 +23,5 @@ class NfWeirdguyDenimSpider(TateAndYokoBaseSpider):
         super().__init__(*args, **kwargs)
         
     def parse(self, response):
-        return super().parse_denim(response)
+        return super().parse_denim(response, self.cut)
     
